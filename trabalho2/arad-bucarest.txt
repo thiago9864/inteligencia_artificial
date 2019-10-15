@@ -1,0 +1,50 @@
+ARESTAS
+1 2 71
+1 4 151
+2 3 75
+3 11 118
+3 4 140
+4 5 99
+4 6 80
+5 13 211
+6 8 146
+6 7 97
+7 8 138
+7 13 101
+8 9 120
+9 10 75
+10 20 70
+11 20 111
+12 13 90
+13 14 85
+14 15 98
+14 16 142
+15 19 86
+16 17 92
+17 18 87
+END
+
+LABELS
+1 Oradea
+2 Zerind
+3 Arad
+4 Sibiu
+5 Fagaras
+6 Vilcea
+7 Pitesti
+8 Craiova
+9 Dobreta
+10 Mehadia
+11 Timisoara
+12 Giurgiu
+13 Bucharest
+14 Urziceni
+15 Hirsova
+16 Vaslui
+17 Iasi
+18 Neamt
+19 Eforie
+20 Lugoj
+END
+
+EOF
