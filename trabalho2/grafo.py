@@ -17,7 +17,10 @@ class No:
         for a in self.arestas:
             if(a.destino == destino):
                 self.arestas.remove(a)
-    
+                
+    def heuristica(self):
+        return 1
+    #colocar heuristica função
     
 #classe que representa arestas
 class Aresta:
@@ -215,8 +218,10 @@ class Grafo:
             o = self.getNo(a.origem)
             d = self.getNo(a.destino)
             #labels que diferenciam um nó do outro
-            oc = "(" + str(o.id) + ")"
-            dc = "(" + str(d.id) + ")"
+#            oc = "_"+str(o.id) + " (" + str(o.heuristica()) + ")"
+#            dc = "_"+str(d.id) + " (" + str(d.heuristica()) + ")"
+            oc = " (" + str(o.heuristica()) + ")"
+            dc = " (" + str(d.heuristica()) + ")"
             if(a.peso!=0):
                 f_graphviz.write('   "'+o.label + oc + '"--"' + d.label + dc + '" [label=' + str(a.peso) + ']\n')
             else:

@@ -20,8 +20,8 @@ grafo.salvarArquivoGraphViz('teste.gv')
 lista_abertos = []
 
 arvore = Grafo()
-lista_abertos.append(arvore.gerarRaiz(1, "Teste"))
-lista_abertos.append(arvore.gerarFilho(lista_abertos[0], 2, "F1"))
+lista_abertos.append(arvore.gerarRaiz(3, grafo.getNo(3).label))#colocar as grafo
+lista_abertos.append(arvore.gerarFilho(lista_abertos[0], 2, "F1"))## pai, id referencia, label
 lista_abertos.append(arvore.gerarFilho(lista_abertos[0], 9, "F2"))
 lista_abertos.append(arvore.gerarFilho(lista_abertos[0], 3, "F3"))
 
