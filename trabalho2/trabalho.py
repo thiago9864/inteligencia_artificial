@@ -6,26 +6,65 @@ Created on Wed Oct  9 20:34:23 2019
 """
 
 from grafo import Grafo
-
+#%%
+def ordena(lista_abertos):
+    new = []
+    no_heu = [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]
+    no_heu  = sorted(no_heu)
+    print(str(no_heu))
+    for i in range(len(lista_abertos)):
+        print('i:'+str(i))
+        for no in lista_abertos:
+            if float(no.getHeu())== no_heu[i]:
+                new.append(no)
+    return new
+    
+#%%
 #variaveis
 instancia_path = 'arad-bucarest.txt'
 
 #inicia o grafo principal
 grafo = Grafo(instancia_path)
-grafo.removeNo(1)      
-grafo.addAresta(1,3,10,0)
-grafo.setLabelVertice(1, 'Barra Mansa')
+#grafo.removeNo(1)      
+#grafo.addAresta(1,3,10,0)
+#grafo.setLabelVertice(1, 'Barra Mansa')
 grafo.salvarArquivoGraphViz('teste.gv')
 
 lista_abertos = []
 
 arvore = Grafo()
-lista_abertos.append(arvore.gerarRaiz(3, grafo.getNo(3).label))#colocar as grafo
-lista_abertos.append(arvore.gerarFilho(lista_abertos[0], 2, "F1"))## pai, id referencia, label
-lista_abertos.append(arvore.gerarFilho(lista_abertos[0], 9, "F2"))
-lista_abertos.append(arvore.gerarFilho(lista_abertos[0], 3, "F3"))
+inicial = 3 #Arad
+final = 13 #Bucareste
+grafo.getNo(final).setHeu(0)
+arvore.gerarRaiz(inicial, str(grafo.getNo(inicial).label))#colocar as grafo
+lista_abertos.append(grafo.getNo(inicial))
+lista_fechados = []
+grafo.getNo(inicial).setMarca()
+while int(noAtual)!= final:
+    #inserindo na lista de abertos
+    for i in range(1,20):
+        if grafo.getAresta(noAtual.id,i):
+            if grafo.getNo(i) not in lista_fechados:
+                lista_abertos.append(grafo.getNo(i))
+            #criar uma condição para a lista de fechados
+            print('sem ordenar:'+str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
+            lista_abertos = ordena(lista_abertos)
+            
+            print(str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
+    velho = noAtual
+    for no in lista_abertos: 
+        if no.marca==False:
+            noAtual = no
+            break
+    
+    arvore.gerarFilho(velho, int(noAtual.id), str(noAtual.label))         
+    #se o no final já estiver na lista de abertos,
+    if grafo.getNo(final) in lista_abertos:
+        break
+    else :
+        lista_fechados.append(grafo.getNo(int(noAtual.id))
+            
 
-lista_abertos.append(arvore.gerarFilho(lista_abertos[2], 3, "F3"))
-lista_abertos.append(arvore.gerarFilho(lista_abertos[2], 2, "F1"))
+arvore.salvarArquivoGraphViz('arvore.gv')            
 
-arvore.salvarArquivoGraphViz('arvore.gv')
+

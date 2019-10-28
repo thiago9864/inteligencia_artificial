@@ -12,6 +12,9 @@ class No:
         self.label = ""
         self.arestas=[]
         self.id_ref=0#essa variavel é um id de referencia
+        self.arestas_peso = []
+        self.heu = 0
+        self.marca = False
     
     def removeAresta(self, destino):
         for a in self.arestas:
@@ -19,8 +22,35 @@ class No:
                 self.arestas.remove(a)
                 
     def heuristica(self):
-        return 1
-    #colocar heuristica função
+#        print('nó:'+self.id)
+        #tenho uma lista de arestas vou ter que organizar por peso
+        #vetor com os pesos
+#        arestas_peso = []
+        self.arestas_peso=[self.arestas[i].getPeso() for i in range (len(self.arestas))]
+        menor1 = min(self.arestas_peso)
+#        print('menor1:'+str(menor1))
+#        print('peso:'+str(self.arestas_peso))
+        self.arestas_peso.remove(menor1)
+#        print('peso remove1:'+str(self.arestas_peso))
+        if len(self.arestas_peso)>0:
+            menor2 = min(self.arestas_peso)
+#            print('menor2:'+str(menor2))
+#            print('peso2:'+str(self.arestas_peso))
+            media = (menor1+menor2)/2
+        else:
+            media = menor1
+#        print('quero sair')
+        self.heu = media
+    
+    def getHeu(self):
+        return self.heu
+    
+    def setHeu(self,heuristica):
+        self.heu = heuristica
+    
+    def setMarca(self):
+        self.marca = True
+
     
 #classe que representa arestas
 class Aresta:
@@ -29,6 +59,10 @@ class Aresta:
         self.destino=destino
         self.peso=peso
         self.heuristica=heuristica
+        
+    #retorna peso da Aresta
+    def getPeso(self):
+        return self.peso
         
         
 #Classe que representa o grafo
@@ -161,7 +195,7 @@ class Grafo:
             return False
         
         for a in no.arestas:
-            if(a.destino == destino):
+            if(int(a.destino) == int(destino)):
                 return a
         return False
     
@@ -203,6 +237,16 @@ class Grafo:
         self.addAresta(id_pai, id_filho, peso, heuristica)
         return id_filho #retorna o id pra gerar os filhos
     
+    def getNo_heu(self, heuristica):
+        for no in self.grafo:
+            if(float(no.getHeu()) == float(heuristica)):
+                return no
+        return False
+        
+    
+    
+ 
+
     ### Funcoes extra ### 
 
          
