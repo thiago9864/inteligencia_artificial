@@ -30,12 +30,12 @@ class Arvore:
             id_no = int(id)
         except ValueError:
             print("ValueError: O valor do Id tem que ser um número.")
-            return False
+            return None
         
         for no in self.grafo:
             if(no.id == id_no):
                 return no
-        return False
+        return None
         
     
     def getNoWithLabel(self, id):
@@ -131,6 +131,8 @@ class Arvore:
         #salva uma delas pra representar a aresta unica
         self.arestas_unicas.append(Aresta(id_origem, id_destino, peso))
         
+        return True
+        
     
     def getAresta(self, origem, destino):
         
@@ -153,7 +155,7 @@ class Arvore:
         for a in no.arestas:
             if a.destino == id_destino:
                 return a
-        return False
+        return None
     
     def removeAresta(self, origem, destino):
         a1 = self.getAresta(origem, destino)
@@ -167,13 +169,13 @@ class Arvore:
     ### criação dos estados e filhos ###
     
     #gera um filho isolado, em geral a raiz
-    def gerarRaiz(self, label_str, label_int=0, heuristica=0):
+    def gerarRaiz(self, label_str, label_int=0, heuristica=None):
         
         try:
             label_int = int(label_int)
         except ValueError:
             print("ValueError: O valor do de ref_id_grafo tem que ser um número.")
-            return False
+            return None
         
         #incrementa o ultimo id
         self.ultimo_id+=1
@@ -189,19 +191,19 @@ class Arvore:
     
     
     #gera um filho isolado, em geral a raiz
-    def gerarFilho(self, id_pai, label_str, label_int=0, peso=0, heuristica=0):
+    def gerarFilho(self, id_pai, label_str, label_int=0, peso=0, heuristica=None):
         
         try:
             id_pai = int(id_pai)
         except ValueError:
             print("ValueError: O valor do Id do pai tem que ser um número.")
-            return False
+            return None
         
         try:
             label_int = int(label_int)
         except ValueError:
             print("ValueError: O valor do de label_int tem que ser um número.")
-            return False
+            return None
         
         #incrementa o ultimo id
         self.ultimo_id+=1
@@ -223,7 +225,7 @@ class Arvore:
         for no in self.grafo:
             if float(no.getHeu()) == float(heuristica):
                 return no
-        return False
+        return None
         
     
     
@@ -246,8 +248,16 @@ class Arvore:
             #labels que diferenciam um nó do outro
 #            oc = "_"+str(o.id) + " (" + str(o.heuristica()) + ")"
 #            dc = "_"+str(d.id) + " (" + str(d.heuristica()) + ")"
-            oc = " (" + str(o.getHeu()) + ")"
-            dc = " (" + str(d.getHeu()) + ")"
+            if o.getHeu() == None:
+                oc = "_"+str(o.id)
+            else:
+                oc = " (" + str(o.getHeu()) + ")"
+            
+            if d.getHeu() == None:
+                dc = "_"+str(d.id)
+            else:
+                dc = " (" + str(d.getHeu()) + ")"
+                
             if a.peso!=0:
                 f_graphviz.write('   "'+o.label_str + oc + '"--"' + d.label_str + dc + '" [label=' + str(a.peso) + ']\n')
             else:

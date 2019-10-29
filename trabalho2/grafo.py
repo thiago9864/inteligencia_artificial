@@ -17,7 +17,6 @@ class Grafo:
         
         self.grafo = []
         self.arestas_unicas = []#arestas unicas usadas pra imprimir o grafo
-        self.child_id_autoincrement=0#gera o id unico pra cada vertice criado
     
         if(arquivo_instancia==""):
             return
@@ -43,7 +42,7 @@ class Grafo:
                 elif(funcao_leitura==2):
                     dados = ls.split(' ')
                     no = self.getNo(int(dados[0]))
-                    no.label = dados[1]
+                    no.label_str = dados[1]
                     
         print("Grafo criado")
         
@@ -59,12 +58,12 @@ class Grafo:
             id_no = int(id)
         except ValueError:
             print("ValueError: O valor do Id tem que ser um número.")
-            return False
+            return None
         
         for no in self.grafo:
             if(no.id == id_no):
                 return no
-        return False
+        return None
         
     
     
@@ -139,20 +138,21 @@ class Grafo:
         no_origem = self.getNo(id_origem)
         no_destino = self.getNo(id_destino)
         
-        if no_origem==False:
+        if no_origem==None:
             no_origem = No(id_origem)
             #define o child_id que vai diferenciar os filhos quando gerar a arvore
             no_origem.id_ref = 0
             #adiciona o vertice no grafo
             self.grafo.append(no_origem)
         
-        if no_destino==False:
+        if no_destino==None:
             no_destino = No(id_destino)
             #define o child_id que vai diferenciar os filhos quando gerar a arvore
             no_destino.id_ref = 0
             #adiciona o vertice no grafo
             self.grafo.append(no_destino)
             
+
         #cria arestas
         aresta_1 = Aresta(id_origem, id_destino, peso)
         aresta_2 = Aresta(id_destino, id_origem, peso)
@@ -164,6 +164,7 @@ class Grafo:
         #salva uma delas pra representar a aresta unica
         self.arestas_unicas.append(Aresta(id_origem, id_destino, peso))
         
+        return True
     
     def getAresta(self, origem, destino):
         
@@ -171,22 +172,22 @@ class Grafo:
             id_origem = int(origem)
         except ValueError:
             print("ValueError: O valor do Id de origem tem que ser um número.")
-            return False
+            return None
         
         try:
             id_destino = int(destino)
         except ValueError:
             print("ValueError: O valor do Id de destino tem que ser um número.")
-            return False
+            return None
         
         no = self.getNo(id_origem)
         if no==False:
-            return False
+            return None
         
         for a in no.arestas:
             if a.destino == id_destino:
                 return a
-        return False
+        return None
     
     
     def removeAresta(self, origem, destino):
@@ -203,7 +204,7 @@ class Grafo:
         for no in self.grafo:
             if float(no.getHeu()) == float(heuristica):
                 return no
-        return False
+        return None
         
     
 
@@ -224,12 +225,20 @@ class Grafo:
             #labels que diferenciam um nó do outro
 #            oc = "_"+str(o.id) + " (" + str(o.heuristica()) + ")"
 #            dc = "_"+str(d.id) + " (" + str(d.heuristica()) + ")"
-            oc = " (" + str(o.heuristica()) + ")"
-            dc = " (" + str(d.heuristica()) + ")"
-            if a.peso!=0:
-                f_graphviz.write('   "'+o.label + oc + '"--"' + d.label + dc + '" [label=' + str(a.peso) + ']\n')
+            if o.getHeu() == None:
+                oc = "_"+str(o.id)
             else:
-                f_graphviz.write('   "'+o.label + oc + '"--"' + d.label + dc + '"\n')
+                oc = " (" + str(o.getHeu()) + ")"
+            
+            if d.getHeu() == None:
+                dc = "_"+str(d.id)
+            else:
+                dc = " (" + str(d.getHeu()) + ")"
+                
+            if a.peso!=0:
+                f_graphviz.write('   "'+o.label_str + oc + '"--"' + d.label_str + dc + '" [label=' + str(a.peso) + ']\n')
+            else:
+                f_graphviz.write('   "'+o.label_str + oc + '"--"' + d.label_str + dc + '"\n')
             
         #escreve fim do arquivo
         f_graphviz.write('}')

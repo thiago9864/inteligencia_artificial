@@ -13,7 +13,7 @@ class No:
         self.arestas=[]
         self.label_int=0 #Label int, util pra colocar um id de referência pra outro grafo
         self.arestas_peso = []
-        self.heu = 0
+        self.heu = None #esta None por padrão porque pode pode ter nó com heuristica 0, no caso, o destino
         self.marca = False
     
     def removeAresta(self, destino):
