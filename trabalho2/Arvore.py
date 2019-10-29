@@ -8,53 +8,24 @@ Created on Wed Oct  9 20:34:23 2019
 from No import No
 from Aresta import Aresta
 
-class Grafo:
+class Arvore:
     grafo = []
     arestas_unicas = []#arestas unicas usadas pra imprimir o grafo
+    ultimo_id=0#gera o id unico pra cada vertice criado
     
     #construtor
-    def __init__(self, arquivo_instancia):
-        
+    def __init__(self):
         self.grafo = []
         self.arestas_unicas = []#arestas unicas usadas pra imprimir o grafo
-        self.child_id_autoincrement=0#gera o id unico pra cada vertice criado
-    
-        if(arquivo_instancia==""):
-            return
+        self.ultimo_id=0#gera o id unico pra cada vertice criado
+
         
-        #faz a leitura do arquivo da instancia
-        with open(arquivo_instancia) as instancia:
-            for line in instancia.readlines():
-                ls = line.rstrip()
-                #print(ls)
-                if(ls == 'ARESTAS'):
-                    funcao_leitura=1
-                    
-                elif(ls == 'LABELS'):
-                    funcao_leitura=2
-                    
-                elif(ls == 'END'):
-                    funcao_leitura=0
-                
-                elif(funcao_leitura==1):
-                    dados = ls.split(' ')
-                    self.addAresta(int(dados[0]), int(dados[1]), int(dados[2]))
-                
-                elif(funcao_leitura==2):
-                    dados = ls.split(' ')
-                    no = self.getNo(int(dados[0]))
-                    no.label = dados[1]
-                    
-        print("Grafo criado")
-        
-        #calcula a heuristica
-        for no in self.grafo:
-            no.heuristica()
 
     ### Vertice ###
     
     
     def getNo(self, id):
+        
         try:
             id_no = int(id)
         except ValueError:
@@ -67,11 +38,8 @@ class Grafo:
         return False
         
     
-    
-    def getLabelNo(self, id):
+    def getNoWithLabel(self, id):
         return self.getNo(id).label
-    
-    
     
     def removeNo(self, id):
         no = self.getNo(id)
@@ -88,7 +56,6 @@ class Grafo:
             self.grafo.remove(no)
         else:
             print("nó "+str(id)+" não encontrado")
-            
             
         
     def setLabelVertice(self, id, label):
@@ -188,7 +155,6 @@ class Grafo:
                 return a
         return False
     
-    
     def removeAresta(self, origem, destino):
         a1 = self.getAresta(origem, destino)
         if a1!=False:
@@ -198,6 +164,60 @@ class Grafo:
             return True
         return False
     
+    ### criação dos estados e filhos ###
+    
+    #gera um filho isolado, em geral a raiz
+    def gerarRaiz(self, label_str, label_int=0, heuristica=0):
+        
+        try:
+            label_int = int(label_int)
+        except ValueError:
+            print("ValueError: O valor do de ref_id_grafo tem que ser um número.")
+            return False
+        
+        #incrementa o ultimo id
+        self.ultimo_id+=1
+        
+        #cria um novo nó
+        no = No(self.ultimo_id)
+        no.label_int = label_int
+        no.label_str = label_str
+        no.setHeu(heuristica)
+        self.grafo.append(no)
+        
+        return self.ultimo_id #retorna o id pra gerar os filhos
+    
+    
+    #gera um filho isolado, em geral a raiz
+    def gerarFilho(self, id_pai, label_str, label_int=0, peso=0, heuristica=0):
+        
+        try:
+            id_pai = int(id_pai)
+        except ValueError:
+            print("ValueError: O valor do Id do pai tem que ser um número.")
+            return False
+        
+        try:
+            label_int = int(label_int)
+        except ValueError:
+            print("ValueError: O valor do de label_int tem que ser um número.")
+            return False
+        
+        #incrementa o ultimo id
+        self.ultimo_id+=1
+        
+        #gera o nó do filho
+        no = No(self.ultimo_id)
+        no.label_int = label_int
+        no.label_str = label_str
+        no.setHeu(heuristica)
+        self.grafo.append(no)
+        
+        #cria a aresta
+        self.addAresta(id_pai, self.ultimo_id, peso)
+        
+        #retorna o id do filho gerado
+        return self.ultimo_id 
     
     def getNo_heu(self, heuristica):
         for no in self.grafo:
@@ -206,6 +226,8 @@ class Grafo:
         return False
         
     
+    
+ 
 
     ### Funcoes extra ### 
 
@@ -224,12 +246,12 @@ class Grafo:
             #labels que diferenciam um nó do outro
 #            oc = "_"+str(o.id) + " (" + str(o.heuristica()) + ")"
 #            dc = "_"+str(d.id) + " (" + str(d.heuristica()) + ")"
-            oc = " (" + str(o.heuristica()) + ")"
-            dc = " (" + str(d.heuristica()) + ")"
+            oc = " (" + str(o.getHeu()) + ")"
+            dc = " (" + str(d.getHeu()) + ")"
             if a.peso!=0:
-                f_graphviz.write('   "'+o.label + oc + '"--"' + d.label + dc + '" [label=' + str(a.peso) + ']\n')
+                f_graphviz.write('   "'+o.label_str + oc + '"--"' + d.label_str + dc + '" [label=' + str(a.peso) + ']\n')
             else:
-                f_graphviz.write('   "'+o.label + oc + '"--"' + d.label + dc + '"\n')
+                f_graphviz.write('   "'+o.label_str + oc + '"--"' + d.label_str + dc + '"\n')
             
         #escreve fim do arquivo
         f_graphviz.write('}')
