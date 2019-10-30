@@ -103,8 +103,11 @@ class Grafo:
                 elif(funcao_leitura==2):
                     dados = ls.split(' ')
                     no = self.getNo(dados[0])
+                    print('label:'+str(dados[1]))
                     no.label = dados[1]
         print("Grafo criado")
+        for n in self.grafo:
+            n.heuristica()
         
 
     ### Vertice ###
@@ -112,7 +115,7 @@ class Grafo:
     
     def getNo(self, id):
         for no in self.grafo:
-            if(int(no.id) == int(id)):
+            if int(no.id) == id:
                 return no
         return False
     
@@ -121,7 +124,7 @@ class Grafo:
     
     def removeNo(self, id):
         no = self.getNo(id)
-        if(no != False):
+        if no != False:
             #remove as arestas associadas a ele
             for a in no.arestas:
                 #remove a origem de todos os nós associados
@@ -138,7 +141,7 @@ class Grafo:
         
     def setLabelVertice(self, id, label):
         no = self.getNo(id)
-        if(no != False):
+        if no != False:
             no.label = label
             
     ### Aresta ###
@@ -146,7 +149,7 @@ class Grafo:
     
     def removeArestaUnica(self, origem, destino):
         for a in self.arestas_unicas:
-            if((a.origem==origem and a.destino==destino) or (a.origem==destino and a.destino==origem)):
+            if(a.origem==origem and a.destino==destino) or (a.origem==destino and a.destino==origem):
                 print('removeu a aresta',origem,destino)
                 self.arestas_unicas.remove(a)
                 return True
@@ -239,7 +242,7 @@ class Grafo:
     
     def getNo_heu(self, heuristica):
         for no in self.grafo:
-            if(float(no.getHeu()) == float(heuristica)):
+            if float(no.getHeu()) == float(heuristica):
                 return no
         return False
         

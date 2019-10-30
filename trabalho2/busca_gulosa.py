@@ -11,9 +11,9 @@ def ordena(lista_abertos):
     new = []
     no_heu = [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]
     no_heu  = sorted(no_heu)
-    print(str(no_heu))
+#    print(str(no_heu))
     for i in range(len(lista_abertos)):
-        print('i:'+str(i))
+#        print('i:'+str(i))
         for no in lista_abertos:
             if float(no.getHeu())== no_heu[i]:
                 new.append(no)
@@ -39,18 +39,21 @@ grafo.getNo(final).setHeu(0)
 arvore.gerarRaiz(inicial, str(grafo.getNo(inicial).label))#colocar as grafo
 lista_abertos.append(grafo.getNo(inicial))
 lista_fechados = []
+noAtual = grafo.getNo(inicial)
 grafo.getNo(inicial).setMarca()
-while int(noAtual)!= final:
+
+while int(noAtual.id)!= final:
     #inserindo na lista de abertos
     for i in range(1,20):
-        if grafo.getAresta(noAtual.id,i):
+        if grafo.getAresta(int(noAtual.id),i):
             if grafo.getNo(i) not in lista_fechados:
                 lista_abertos.append(grafo.getNo(i))
             #criar uma condição para a lista de fechados
-            print('sem ordenar:'+str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
+#            print('sem ordenar:'+str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
             lista_abertos = ordena(lista_abertos)
             
-            print(str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
+#            print(str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
+    print(str(noAtual.id))
     velho = noAtual
     for no in lista_abertos: 
         if no.marca==False:
@@ -62,7 +65,7 @@ while int(noAtual)!= final:
     if grafo.getNo(final) in lista_abertos:
         break
     else :
-        lista_fechados.append(grafo.getNo(int(noAtual.id))
+        lista_fechados.append(grafo.getNo(int(noAtual.id)))
             
 
 arvore.salvarArquivoGraphViz('arvore.gv')            
