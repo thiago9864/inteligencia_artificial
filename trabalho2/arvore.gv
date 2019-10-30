@@ -1,7 +1,0 @@
-graph {
-   "Teste (None)"--"F1 (None)"
-   "Teste (None)"--"F2 (None)"
-   "Teste (None)"--"F3 (None)"
-   "F2 (None)"--"F3 (None)"
-   "F2 (None)"--"F1 (None)"
-}

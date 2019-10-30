@@ -1,4 +1,5 @@
 graph {
    "Arad (96.5)"--"Sibiu (89.5)" [label=99]
    "Arad (96.5)"--"Zerind (73.0)" [label=140]
+   "Arad (96.5)"--"Barra Mansa_4" [label=999]
 }
