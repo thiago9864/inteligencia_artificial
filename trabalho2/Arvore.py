@@ -41,6 +41,18 @@ class Arvore:
     def getNoWithLabel(self, id):
         return self.getNo(id).label
     
+    def getNoByLabelInt(self, label_int):
+        try:
+            label_int = int(label_int)
+        except ValueError:
+            print("ValueError: O valor do label_int tem que ser um número.")
+            return None
+        
+        for no in self.grafo:
+            if(no.label_int == label_int):
+                return no
+        return None
+    
     def removeNo(self, id):
         no = self.getNo(id)
         if(no != False):
@@ -166,11 +178,17 @@ class Arvore:
             return True
         return False
     
-    ### criação dos estados e filhos ###
+    
+    
+    ######### criação dos estados e filhos #########
+    
+    
     
     #gera um filho isolado, em geral a raiz
     def gerarRaiz(self, label_str, label_int=0, heuristica=None):
-        
+        '''
+        Essa função gera a raiz da arvore de solução
+        '''
         try:
             label_int = int(label_int)
         except ValueError:
@@ -184,6 +202,7 @@ class Arvore:
         no = No(self.ultimo_id)
         no.label_int = label_int
         no.label_str = label_str
+        no.id_pai = -1
         no.setHeu(heuristica)
         self.grafo.append(no)
         
@@ -192,7 +211,9 @@ class Arvore:
     
     #gera um filho isolado, em geral a raiz
     def gerarFilho(self, id_pai, label_str, label_int=0, peso=0, heuristica=None):
-        
+        '''
+        Essa função gera um filho, dado o id do pai (que vem da arvore)
+        '''
         try:
             id_pai = int(id_pai)
         except ValueError:
@@ -212,6 +233,7 @@ class Arvore:
         no = No(self.ultimo_id)
         no.label_int = label_int
         no.label_str = label_str
+        no.id_pai = id_pai
         no.setHeu(heuristica)
         self.grafo.append(no)
         
@@ -222,12 +244,47 @@ class Arvore:
         return self.ultimo_id 
     
     def getNo_heu(self, heuristica):
+        '''
+        Obtem o nó dado o valor da heuristica
+        '''
         for no in self.grafo:
             if float(no.getHeu()) == float(heuristica):
                 return no
         return None
         
+    def getCaminho(self, destino):
+        '''
+        Obtem o caminho até a raiz da arvore dada o id da folha
+        '''
+        no_dest = self.getNo(destino)
+        
+        if no_dest == None:
+            print("O id de destino não está na arvore")
+            return
+        
+        p = destino
+        caminho = []
+        
+        while p != -1:
+            no = self.getNo(p)
+            caminho.append(no.id)
+            p = no.id_pai
+            
+        caminho.reverse()
+        
+        return caminho
+        
     
+    def verificaNoCaminhoWithLabelInt(self, id_folha, label_int):
+        '''
+        Verifica se no caminho gerado dado o di da folha, o id do nó no grafo (label_int)
+        está nesse caminho.
+        '''
+        caminho = self.getCaminho(id_folha)
+        for c in caminho:
+            if self.getNo(c).label_int == label_int:
+                return True
+        return False
     
  
 
@@ -245,23 +302,25 @@ class Arvore:
         for a in self.arestas_unicas:
             o = self.getNo(a.origem)
             d = self.getNo(a.destino)
-            #labels que diferenciam um nó do outro
-#            oc = "_"+str(o.id) + " (" + str(o.heuristica()) + ")"
-#            dc = "_"+str(d.id) + " (" + str(d.heuristica()) + ")"
-            if o.getHeu() == None:
-                oc = "_"+str(o.id)
-            else:
+            
+            #ids pra diferenciar um nó do outro
+            id_o = str(o.id)+": "
+            id_d = str(d.id)+": "
+            
+            #mostra heuristicas se existirem
+            oc = ""
+            dc = ""
+            
+            if o.getHeu() != None:
                 oc = " (" + str(o.getHeu()) + ")"
             
-            if d.getHeu() == None:
-                dc = "_"+str(d.id)
-            else:
+            if d.getHeu() != None:
                 dc = " (" + str(d.getHeu()) + ")"
                 
             if a.peso!=0:
-                f_graphviz.write('   "'+o.label_str + oc + '"--"' + d.label_str + dc + '" [label=' + str(a.peso) + ']\n')
+                f_graphviz.write('   "' + id_o + o.label_str + oc + '"--"' + id_d + d.label_str + dc + '" [label=' + str(a.peso) + ']\n')
             else:
-                f_graphviz.write('   "'+o.label_str + oc + '"--"' + d.label_str + dc + '"\n')
+                f_graphviz.write('   "' + id_o + o.label_str + oc + '"--"' + id_d + d.label_str + dc + '"\n')
             
         #escreve fim do arquivo
         f_graphviz.write('}')

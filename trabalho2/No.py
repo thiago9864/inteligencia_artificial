@@ -9,6 +9,7 @@ Created on Wed Oct  9 20:34:23 2019
 class No:
     def __init__(self, id):
         self.id = id
+        self.id_pai = -1 #id do pai, pra ser usado na arvore. Usar -1 se for a raiz
         self.label_str = "" #Label string, util pra colocar o nome da cidade
         self.arestas=[]
         self.label_int=0 #Label int, util pra colocar um id de referência pra outro grafo

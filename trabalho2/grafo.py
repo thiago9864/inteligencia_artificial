@@ -222,23 +222,25 @@ class Grafo:
         for a in self.arestas_unicas:
             o = self.getNo(a.origem)
             d = self.getNo(a.destino)
-            #labels que diferenciam um nó do outro
-#            oc = "_"+str(o.id) + " (" + str(o.heuristica()) + ")"
-#            dc = "_"+str(d.id) + " (" + str(d.heuristica()) + ")"
-            if o.getHeu() == None:
-                oc = "_"+str(o.id)
-            else:
+            
+            #ids pra diferenciar um nó do outro
+            id_o = str(o.id)+": "
+            id_d = str(d.id)+": "
+            
+            #mostra heuristicas se existirem
+            oc = ""
+            dc = ""
+            
+            if o.getHeu() != None:
                 oc = " (" + str(o.getHeu()) + ")"
             
-            if d.getHeu() == None:
-                dc = "_"+str(d.id)
-            else:
+            if d.getHeu() != None:
                 dc = " (" + str(d.getHeu()) + ")"
                 
             if a.peso!=0:
-                f_graphviz.write('   "'+o.label_str + oc + '"--"' + d.label_str + dc + '" [label=' + str(a.peso) + ']\n')
+                f_graphviz.write('   "' + id_o + o.label_str + oc + '"--"' + id_d + d.label_str + dc + '" [label=' + str(a.peso) + ']\n')
             else:
-                f_graphviz.write('   "'+o.label_str + oc + '"--"' + d.label_str + dc + '"\n')
+                f_graphviz.write('   "' + id_o + o.label_str + oc + '"--"' + id_d + d.label_str + dc + '"\n')
             
         #escreve fim do arquivo
         f_graphviz.write('}')
