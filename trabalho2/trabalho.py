@@ -5,7 +5,7 @@ Created on Wed Oct  9 20:34:23 2019
 @author: Thiago
 """
 
-from Grafo import Grafo
+from grafo import Grafo
 from Arvore import Arvore
 
 #variaveis
