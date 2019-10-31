@@ -54,14 +54,21 @@ while int(noAtual.id)!= final:
             lista_abertos = ordena(lista_abertos)
             
 #            print(str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
-    print(str(noAtual.id))
+    #print(str(noAtual.id))
     velho = noAtual
     for no in lista_abertos: 
         if no.marca==False:
             noAtual = no
             break
+        
+    print(velho.id, noAtual.id)
     
-    arvore.gerarFilho(velho.id, noAtual.label_str, noAtual.id, grafo.getAresta(velho.id,noAtual.id).getPeso(),noAtual.getHeu())         
+    arvore.gerarFilho(velho.id, 
+                      noAtual.label_str, 
+                      noAtual.id, 
+                      grafo.getAresta(velho.id, noAtual.id).getPeso(), 
+                      noAtual.getHeu()
+                      )         
     #se o no final já estiver na lista de abertos,
     if grafo.getNo(final) in lista_abertos:
         break

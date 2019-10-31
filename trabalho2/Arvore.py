@@ -118,14 +118,14 @@ class Arvore:
         no_origem = self.getNo(id_origem)
         no_destino = self.getNo(id_destino)
         
-        if no_origem==False:
+        if no_origem==None:
             no_origem = No(id_origem)
             #define o child_id que vai diferenciar os filhos quando gerar a arvore
             no_origem.id_ref = 0
             #adiciona o vertice no grafo
             self.grafo.append(no_origem)
         
-        if no_destino==False:
+        if no_destino==None:
             no_destino = No(id_destino)
             #define o child_id que vai diferenciar os filhos quando gerar a arvore
             no_destino.id_ref = 0
