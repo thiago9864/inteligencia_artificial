@@ -9,16 +9,22 @@ from grafo import Grafo
 from Arvore import Arvore
 #%%
 def ordena(lista_abertos):
-    new = []
-    no_heu = [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]
-    no_heu  = sorted(no_heu)
-#    print(str(no_heu))
-    for i in range(len(lista_abertos)):
-#        print('i:'+str(i))
-        for no in lista_abertos:
-            if float(no.getHeu())== no_heu[i]:
-                new.append(no)
-    return new
+#    new = []
+#    no_heu = [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]
+##    print('heu:'+str(no_heu))
+#    no_heu  = sorted(no_heu)
+##    print(str(no_heu))
+#    for i in range(len(lista_abertos)):
+##        print('i:'+str(i))
+#        for no in lista_abertos:
+#            if float(no.getHeu())== no_heu[i]:
+#                new.append(no)
+#    print('NEW:'+str([(new[i].label_str) for i in range(len(new))]))
+    lista_abertos.sort(key=lambda x: x.getHeu())
+#    print("printa")
+#    print(lista_abertos)
+#    print('NEW:'+str([(lista_abertos[i].label_str) for i in range(len(lista_abertos))]))
+#    return new
     
 #%%
 #variaveis
@@ -43,19 +49,27 @@ lista_fechados = [grafo.getNo(inicial)]
 noAtual = grafo.getNo(inicial)
 grafo.getNo(inicial).setMarca()
 
+
 while int(noAtual.id)!= final:
+    print(noAtual.label_str)
     #inserindo na lista de abertos
     for aresta_noAtual in noAtual.arestas :
-        if grafo.getNo(aresta_noAtual.destino).label_str=='Sibiu':
-            print(str( [grafo.getNo(noAtual.arestas[i].destino).label_str for i in range(len(noAtual.arestas))]))
-        if grafo.getNo(aresta_noAtual.destino).marca==False :#not in lista_fechados
-            
-            lista_abertos.append(grafo.getNo(aresta_noAtual.destino))
+#        if noAtual.label_str=='Sibiu':
+#            print('marca:'+str(noAtual.marca))
+#            print('sibiu:'+str( [grafo.getNo(noAtual.arestas[i].destino).label_str for i in range(len(noAtual.arestas))]))
+        if grafo.getNo(aresta_noAtual.destino) not in lista_fechados :#not in lista_fechados
+             print('no entrando:'+grafo.getNo(aresta_noAtual.destino).label_str)
+             arvore.gerarFilho(arvore.getNoByLabelInt(noAtual.id).id,grafo.getNo(aresta_noAtual.destino).label_str, 
+                      grafo.getNo(aresta_noAtual.destino).id, grafo.getAresta( noAtual.id,grafo.getNo(aresta_noAtual.destino).id).getPeso(), 
+                       grafo.getNo(aresta_noAtual.destino).getHeu())
+             lista_abertos.append(grafo.getNo(aresta_noAtual.destino))
             #criar uma condição para a lista de fechados
 #            print('sem ordenar:'+str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
-    lista_abertos = ordena(lista_abertos)   
+#            print(grafo.getNo(aresta_noAtual.destino).label_str)    
+#    lista_abertos = ordena(lista_abertos)
+    ordena(lista_abertos)
             
-#    print(str( [(lista_abertos[i].label_str) for i in range(len(lista_abertos))]))
+    print(str( [(lista_abertos[i].label_str) for i in range(len(lista_abertos))]))
     #print(str(noAtual.id))
     
     velho = noAtual
@@ -66,21 +80,16 @@ while int(noAtual.id)!= final:
         
     for no in lista_abertos: 
         if no.marca==False:
-            if no in lista_vizinhos:
-                noAtual = no
+#            if no in lista_vizinhos:
+            noAtual = no
 #                print('quem eu marquei do noATual:'+noAtual.label_str)
-                break
+            break
     
-    noAtual.setMarca()
+    
 #    print('ruim')
 #    print(velho.label_str, noAtual.label_str)
-    
-    arvore.gerarFilho(velho.id, 
-                      noAtual.label_str, 
-                      noAtual.id, 
-                      grafo.getAresta(velho.id, noAtual.id).getPeso(), 
-                      noAtual.getHeu()
-                      )    
+    noAtual.setMarca()
+       
        
     #se o no final já estiver na lista de abertos,
     if grafo.getNo(final) in lista_abertos:
