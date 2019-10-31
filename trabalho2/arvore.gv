@@ -1,2 +1,8 @@
 graph {
+   "3: "--"2: Zerind (73.0)" [label=75]
+   "2: Zerind (73.0)"--"3: " [label=71]
+   "1: Arad (96.5)"--"4: Sibiu (89.5)" [label=151]
+   "4: Sibiu (89.5)"--"5: Vilcea (88.5)" [label=80]
+   "6: Pitesti (99.0)"--"6: Pitesti (99.0)" [label=97]
+   "7: Bucharest (0)"--"7: Bucharest (0)" [label=101]
 }

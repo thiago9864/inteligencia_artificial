@@ -39,41 +39,56 @@ final = 13 #Bucareste
 grafo.getNo(final).setHeu(0)
 arvore.gerarRaiz( grafo.getNo(inicial).label_str,inicial,grafo.getNo(inicial).getHeu())#colocar as grafo
 lista_abertos.append(grafo.getNo(inicial))
-lista_fechados = []
+lista_fechados = [grafo.getNo(inicial)]
 noAtual = grafo.getNo(inicial)
 grafo.getNo(inicial).setMarca()
 
 while int(noAtual.id)!= final:
     #inserindo na lista de abertos
-    for i in range(1,20):
-        if grafo.getAresta(int(noAtual.id),i):
-            if grafo.getNo(i) not in lista_fechados:
-                lista_abertos.append(grafo.getNo(i))
+    for aresta_noAtual in noAtual.arestas :
+        if grafo.getNo(aresta_noAtual.destino).label_str=='Sibiu':
+            print(str( [grafo.getNo(noAtual.arestas[i].destino).label_str for i in range(len(noAtual.arestas))]))
+        if grafo.getNo(aresta_noAtual.destino).marca==False :#not in lista_fechados
+            
+            lista_abertos.append(grafo.getNo(aresta_noAtual.destino))
             #criar uma condição para a lista de fechados
 #            print('sem ordenar:'+str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
-            lista_abertos = ordena(lista_abertos)
+    lista_abertos = ordena(lista_abertos)   
             
-#            print(str( [float(lista_abertos[i].getHeu()) for i in range(len(lista_abertos))]))
+#    print(str( [(lista_abertos[i].label_str) for i in range(len(lista_abertos))]))
     #print(str(noAtual.id))
+    
     velho = noAtual
+     
+    lista_vizinhos = []
+    for aresta in velho.arestas:
+        lista_vizinhos.append(grafo.getNo(aresta.destino))
+        
     for no in lista_abertos: 
         if no.marca==False:
-            noAtual = no
-            break
-        
-    print(velho.id, noAtual.id)
+            if no in lista_vizinhos:
+                noAtual = no
+#                print('quem eu marquei do noATual:'+noAtual.label_str)
+                break
+    
+    noAtual.setMarca()
+#    print('ruim')
+#    print(velho.label_str, noAtual.label_str)
     
     arvore.gerarFilho(velho.id, 
                       noAtual.label_str, 
                       noAtual.id, 
                       grafo.getAresta(velho.id, noAtual.id).getPeso(), 
                       noAtual.getHeu()
-                      )         
+                      )    
+       
     #se o no final já estiver na lista de abertos,
     if grafo.getNo(final) in lista_abertos:
         break
     else :
-        lista_fechados.append(grafo.getNo(noAtual.id))
+#        print('colocando nos fechados:'+grafo.getNo(velho.id).label_str)
+        lista_fechados.append(grafo.getNo(velho.id))
+        
             
 
 arvore.salvarArquivoGraphViz('arvore.gv')            

@@ -180,7 +180,7 @@ class Grafo:
             return None
         
         no = self.getNo(id_origem)
-        if no==False:
+        if no==None:
             return None
         
         for a in no.arestas:
