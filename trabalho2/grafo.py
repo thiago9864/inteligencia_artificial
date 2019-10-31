@@ -65,9 +65,7 @@ class Grafo:
                 return no
         return None
         
-    
-    
-    def getLabelNo(self, id):
+    def getNoWithLabel(self, id):
         return self.getNo(id).label
     
     
