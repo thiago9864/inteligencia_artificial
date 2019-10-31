@@ -1,49 +1,48 @@
 from grafo import Grafo
 from Arvore import  Arvore
 
+def busca_a_estrela(grafo, no_origem, no_destino):
+    arvore_resultado = Arvore()
+    no_atual = grafo.getNo(no_origem)
+    no_destino = grafo.getNo(no_destino)
 
-def g(arvore,destino):
-    return arvore.getCaminho(destino)
+    atual_id = arvore_resultado.gerarRaiz(no_atual.label_str, label_int=no_atual.id)
 
-def f(h, g):
-    return h + g
-
-def a_estrela(inicio, fim):
-    instancia_path = 'arad-bucarest.txt'
-
-    grafo = Grafo(instancia_path)
-    arvore = Arvore()
-
-    abertos_heu = heuristica_()
-    abertos_ord = busca_ordenada_grafo_local(grafo,grafo.getNo(inicio),grafo.getNo(fim))
-
-    print("Abertos Heuristica\n")
-    for i in range (len(abertos_heu)):
-        print(str(abertos_heu[i].getHeu())+" - ")
-
-    print("\nAbertos Ordenados\n")
-    print(abertos_ord)
-
-
+    atual = {'no': atual_id, 'custo': 0, 'caminho': []}
+    destino = no_destino.id
+    fechados = [atual]
     abertos = []
-    fechados = []
 
-    atual = grafo.getNo(inicio)
-    abertos.append(atual)
-'''
-    lista_f = []
 
-# enquanto abertos nao estiver vazio
-while int(atual.id) != fim:
-    for i in range(len(abertos)):
-        if (len(abertos) == 1):
-            func = f(abertos[i].getHeu(), g(arvore, 0))
-        else:
-            func = f(abertos[i].getHeu(), g(arvore, abertos[i + 1]))
-'''
+    while arvore_resultado.getNo(atual['no']).label_int != no_destino.id:
 
-a_estrela(3,13)
+        for adj in no_atual.arestas:
 
+            if adj.destino not in atual['caminho']:
+                grafo_id = arvore_resultado.getNo(atual['no']).label_int
+
+                novo_custo = grafo.getAresta(grafo_id, adj.destino).peso + atual['custo'] + grafo.getNo(
+                    grafo_id).getHeu()
+
+                adj_label = grafo.getNo(adj.destino).label_str
+
+                novo_id = arvore_resultado.gerarFilho(atual['no'], label_str=adj_label,
+                                                      label_int=adj.destino, peso= grafo.getAresta(grafo_id, adj.destino).peso,
+                                                      heuristica=novo_custo)
+
+                novo_caminho = atual['caminho'] + [grafo_id]
+
+                abertos.append({'no': novo_id, 'custo': novo_custo, 'caminho': novo_caminho})
+
+        abertos.sort(key=lambda x: x['custo'])  # ordenando lista de abertos pelo custo do caminho.
+        fechados.append(atual)
+        proximo = abertos.pop(0)
+
+        atual = proximo
+        grafo_id = arvore_resultado.getNo(atual['no']).label_int
+        no_atual = grafo.getNo(grafo_id)
+
+    return arvore_resultado, abertos, fechados
 
 
 

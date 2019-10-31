@@ -7,10 +7,11 @@ Created on Wed Oct  9 20:34:23 2019
 
 from grafo import Grafo
 from Arvore import Arvore
+from a_estrela import  busca_a_estrela
 from algoritmos import busca_ordenada_grafo_local
 
 #variaveis
-instancia_path = '/home/victor/Documentos/UFJF/IA/inteligencia_artificial/trabalho2/arad-bucarest.txt'
+instancia_path = 'arad-bucarest.txt'
 
 #inicia o grafo principal
 g = Grafo(instancia_path)  
@@ -170,6 +171,10 @@ lista_fechados.append(id_pai)
     
 arvore.salvarArquivoGraphViz("teste_arvore.gv")
 
-(a,_,_) = busca_ordenada_grafo_local(g,3,13)
+(a,open,closed) = busca_ordenada_grafo_local(g,3,13)
+print("Lista Abertos: ")
+print(open)
+print("Lista Fechados: ")
+print(closed)
 
 a.salvarArquivoGraphViz("teste_busca.gv")
