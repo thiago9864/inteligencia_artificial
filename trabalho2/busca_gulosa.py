@@ -6,6 +6,7 @@ Created on Wed Oct  9 20:34:23 2019
 """
 
 from grafo import Grafo
+from Arvore import Arvore
 #%%
 def ordena(lista_abertos):
     new = []
@@ -32,11 +33,11 @@ grafo.salvarArquivoGraphViz('teste.gv')
 
 lista_abertos = []
 
-arvore = Grafo()
+arvore = Arvore()
 inicial = 3 #Arad
 final = 13 #Bucareste
 grafo.getNo(final).setHeu(0)
-arvore.gerarRaiz(inicial, str(grafo.getNo(inicial).label))#colocar as grafo
+arvore.gerarRaiz( grafo.getNo(inicial).label_str,inicial,grafo.getNo(inicial).getHeu())#colocar as grafo
 lista_abertos.append(grafo.getNo(inicial))
 lista_fechados = []
 noAtual = grafo.getNo(inicial)
@@ -60,12 +61,12 @@ while int(noAtual.id)!= final:
             noAtual = no
             break
     
-    arvore.gerarFilho(velho, int(noAtual.id), str(noAtual.label))         
+    arvore.gerarFilho(velho.id, noAtual.label_str, noAtual.id, grafo.getAresta(velho.id,noAtual.id).getPeso(),noAtual.getHeu())         
     #se o no final já estiver na lista de abertos,
     if grafo.getNo(final) in lista_abertos:
         break
     else :
-        lista_fechados.append(grafo.getNo(int(noAtual.id)))
+        lista_fechados.append(grafo.getNo(noAtual.id))
             
 
 arvore.salvarArquivoGraphViz('arvore.gv')            

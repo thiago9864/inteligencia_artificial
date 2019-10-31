@@ -48,9 +48,6 @@ class Grafo:
         for n in self.grafo:
             n.heuristica()
         
-        #calcula a heuristica
-        for no in self.grafo:
-            no.heuristica()
 
     ### Vertice ###
     
